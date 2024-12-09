@@ -1,0 +1,24 @@
+# 服务提供商提供的 frp 服务器 IP 地址或者域名地址
+bindAddr = "0.0.0.0"
+# 服务提供商提供的 frp 服务端口号
+bindPort = 65534
+# 服务鉴权方式
+auth.method = "token"
+# 服务提供商提供的 token 密码
+auth.token = "Frp$Gsgameshare.com@!@#$2024"
+# 默认为 127.0.0.1，如果需要公网访问，需要修改为 0.0.0.0。
+webServer.addr = "0.0.0.0"
+webServer.port = 65500
+# dashboard 用户名密码，可选，默认为空
+webServer.user = "yulinzhihou"
+webServer.password = "Sinall0.1234!@#$"
+
+log.to = "/var/log/frp/frps.log"
+# trace, debug, info, warn, error
+log.level = "trace"
+log.maxDays = 3
+# disable log colors when log.to is console, default is false
+log.disablePrintColor = false
+
+# DetailedErrorsToClient defines whether to send the specific error (with debug info) to frpc. By default, this value is true.
+detailedErrorsToClient = true

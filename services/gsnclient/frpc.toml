@@ -1,0 +1,51 @@
+# 服务器IP
+server_addr = "0.0.0.0"
+# 服务器通讯端口
+server_port = 65534
+# 日志文件 
+log.to = "/var/log/frp/frpc.log"
+# 日志文件级别
+log.level = "trace"
+# 日志存储天数
+log.maxDays = 30
+authentication_method = "token"
+# default is true
+loginFailExit = true
+# disable log colors when log.to is console, default is false
+log.disablePrintColor = false
+# 认证方式
+auth.method = "token"
+# auth token
+auth.token = "Frp$Gsgameshare.com@!@#$2024"
+
+
+# Set admin address for control frpc's action by http api such as reload
+webServer.addr = "127.0.0.1"
+webServer.port = 7400
+webServer.user = "admin"
+webServer.password = "admin"
+
+[[proxies]]
+name = "502-tl-login"
+type = "tcp"
+localIP = "192.168.10.234"
+localPort = 23502
+# If remotePort is 0, frps will assign a random port for you
+remotePort = 23502
+
+[[proxies]]
+name = "502-tl-reg"
+type = "tcp"
+localIP = "192.168.10.234"
+localPort = 25502
+# If remotePort is 0, frps will assign a random port for you
+remotePort = 25502
+
+
+[[proxies]]
+name = "502-tl-mysql"
+type = "tcp"
+localIP = "192.168.10.234"
+localPort = 33061
+# If remotePort is 0, frps will assign a random port for you
+remotePort = 30502

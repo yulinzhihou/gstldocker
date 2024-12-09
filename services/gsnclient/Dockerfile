@@ -7,12 +7,12 @@ FROM alpine
 
 LABEL Author="yulinzhihou" Email="yulinzhihou@gmail.com" website="https://gsgameshare.com"
 
-ENV VERSION=0.48.0 TZ=Asia/Shanghai
+ENV VERSION=0.61.0 TZ=Asia/Shanghai
 WORKDIR /
 
 RUN apk add --no-cache tzdata \
-    && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
-    && echo ${TZ} > /etc/timezone
+	&& ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
+	&& echo ${TZ} > /etc/timezone
 
 RUN if [ "$(uname -m)" = "x86_64" ]; then export PLATFORM=amd64 ; else if [ "$(uname -m)" = "aarch64" ]; then export PLATFORM=arm64 ; fi fi \
 	&& wget --no-check-certificate "https://github.com/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_linux_${PLATFORM}.tar.gz" \
