@@ -1,4 +1,4 @@
-name: Github Action to build docker images
+name: build docker images for multi platforms
 
 on:
   push:
