@@ -3,7 +3,7 @@ name: build docker images for multi platforms
 on:
   push:
     branches:
-      [ mastrer ]
+      [ master ]
 
 jobs:
   job1:
