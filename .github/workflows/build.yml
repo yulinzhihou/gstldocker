@@ -39,8 +39,8 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push yulinzhihou/centos6.10:latest \ 
-          docker push yulinzhihou/centos6.10:${{ steps.date.outputs.today }}
+          docker push -t yulinzhihou/centos6.10:latest \ 
+          docker push -t yulinzhihou/centos6.10:${{ steps.date.outputs.today }}
 
 
   # job2:
