@@ -46,6 +46,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          working-directory: ./services/gsserver
           file: ./services/gsserver/Dockerfile
           # 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
           platforms: linux/amd64
