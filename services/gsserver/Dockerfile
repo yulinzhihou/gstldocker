@@ -2,12 +2,15 @@ FROM centos:6.10
 
 LABEL author="yulinzhihou" website="https://gsgameshare.com"
 
-COPY ./config/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm /tmp/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm
+RUN mkdir -p /usr/local/src/tlbb
 
-COPY ./config//*.repo  /etc/yum.repos.d/
+WORKDIR /usr/local/src/tlbb
 
-RUN mkdir -p /usr/local/src/tlbb && \
-    yum clean all && \
+COPY lib/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm /usr/local/src/tlbb/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm
+
+COPY config//*.repo  /etc/yum.repos.d/
+
+RUN yum clean all && \
     yum makecache && \
     yum update -y && \
     yum install -y libstdc++.i686 unixODBC.i686 vim curl wget && \
@@ -16,9 +19,7 @@ RUN mkdir -p /usr/local/src/tlbb && \
     ln -s /usr/lib/libodbc.so /usr/lib/libodbc.so.1 && \
     yum localinstall -y /tmp/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm && \
     ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone && \
-    rm -f /tmp/* && \
+    rm -rf /usr/local/src/tlbb/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm && \
     yum clean all
-
-WORKDIR /usr/local/src/tlbb
 
 CMD tail -f /dev/null
