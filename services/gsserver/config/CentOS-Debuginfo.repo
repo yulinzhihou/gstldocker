@@ -15,6 +15,6 @@
 [base-debuginfo]
 name=CentOS-6 - Debuginfo
 baseurl=http://debuginfo.centos.org/$releasever/$basearch/
-gpgcheck=1
+gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-Debug-6
 enabled=0

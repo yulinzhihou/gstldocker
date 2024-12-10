@@ -16,6 +16,6 @@ name=CentOS-$releasever - Media
 baseurl=file:///media/CentOS/
         file:///media/cdrom/
         file:///media/cdrecorder/
-gpgcheck=1
+gpgcheck=0
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6

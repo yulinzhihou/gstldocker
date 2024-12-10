@@ -9,7 +9,6 @@ RUN mkdir -p /usr/local/src/tlbb && \
     yum clean all && \
     yum makecache && \
     yum update -y && \
-    yum check && \
     yum install -y libstdc++.i686 unixODBC.i686 vim curl wget && \
     yum -y install epel-release && \
     yum -y install jq && \
