@@ -3,7 +3,11 @@ FROM centos:6.10
 LABEL author="yulinzhihou" website="https://gsgameshare.com"
 
 COPY ./config/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm /tmp/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm
-COPY ./config/CentOS-Base.repo ./config/CentOS-Debuginfo.repo ./config/CentOS-fasttrack.repo ./config/CentOS-Media.repo ./config/CentOS-Vault.repo  /etc/yum.repos.d/
+COPY ./config/CentOS-Base.repo  /etc/yum.repos.d/
+COPY ./config/CentOS-Debuginfo.repo  /etc/yum.repos.d/
+COPY ./config/CentOS-fasttrack.repo  /etc/yum.repos.d/
+COPY ./config/CentOS-Media.repo  /etc/yum.repos.d/
+COPY ./config/CentOS-Vault.repo  /etc/yum.repos.d/
 
 RUN mkdir -p /usr/local/src/tlbb && \
     yum clean all && \
