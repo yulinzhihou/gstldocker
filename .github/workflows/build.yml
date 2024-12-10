@@ -11,36 +11,18 @@ jobs:
     # 运行所需要的虚拟机环境。它是必填字段
     runs-on: ubuntu-latest
     steps:
-      - name: print a greeting
-        env: 
-          MY_VAR: Hi there! My name is
-          FIRST_NAME: Mona
-          MIDDLE_NAME: The
-          LAST_NAME: Octocat
-        run: |
-          echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME.
-
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=today::$(date +'%Y-%m-%d_%H-%M')"
-
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v3
-      # - name: Set up Docker Buildx
-      #   id: buildx
-      #   uses: docker/setup-buildx-action@v3
-
-      # - name: Available platforms
-      #   run: echo ${{ steps.buildx.outputs.platforms }}
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Debug current directory
+        run: |
+          pwd
+          ls -al
 
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -56,6 +38,9 @@ jobs:
           tags: |
             gs/centos6.10:${{ steps.date.outputs.today }}
             gs/centos6.10:latest
+          run: |
+            pwd
+            ls -al
 
   # job2:
   #   name: build gs server for centos7.10
