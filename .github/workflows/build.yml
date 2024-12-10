@@ -36,7 +36,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           # 给清单打上多个标签
           tags: |
-            yulinzhihou/centos6.10:${{ steps.date.outputs.today }}
             yulinzhihou/centos6.10:latest
           run: |
             pwd
