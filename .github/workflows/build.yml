@@ -23,16 +23,20 @@ jobs:
         run: |
           pwd
           ls -al
+      - name: Build Docker Image
+        run: |
+          docker buildx build \
+            --file ./services/gsserver/Dockerfile \
+            --platform linux/amd64 \
+            --tag yulinzhihou/centos6.10:latest \
+            --push \
+            ./services/gsserver
+    
 
-      - name: Build and push
+      - name: push
         uses: docker/build-push-action@v6
         with:
           context: .
-          working-directory: ./services/gsserver
-          file: ./services/gsserver/Dockerfile
-          # 所需要的体系结构，可以在 Available platforms 步骤中获取所有的可用架构
-          platforms: linux/amd64
-          # 镜像推送时间
           push: ${{ github.event_name != 'pull_request' }}
           # 给清单打上多个标签
           tags: |
