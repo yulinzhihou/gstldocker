@@ -8,7 +8,7 @@ WORKDIR /usr/local/src/tlbb
 
 # COPY lib/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm /usr/local/src/tlbb/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm
 
-COPY config//*.repo  /etc/yum.repos.d/
+COPY config/*.repo  /etc/yum.repos.d/
 
 RUN yum clean all && \
     yum makecache && \
