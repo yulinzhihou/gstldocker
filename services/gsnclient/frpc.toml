@@ -16,17 +16,17 @@ log.disablePrintColor = false
 # 认证方式
 auth.method = "token"
 # auth token
-auth.token = "Frp$Gsgameshare.com@!@#$2024"
+auth.token = "gsgameshare.com"
 
 
 # Set admin address for control frpc's action by http api such as reload
 webServer.addr = "127.0.0.1"
-webServer.port = 7400
+webServer.port = 57400
 webServer.user = "admin"
-webServer.password = "admin"
+webServer.password = "gsgameshare.com"
 
 [[proxies]]
-name = "502-tl-login"
+name = "gs-tl-login"
 type = "tcp"
 localIP = "192.168.10.234"
 localPort = 23502
@@ -34,7 +34,7 @@ localPort = 23502
 remotePort = 23502
 
 [[proxies]]
-name = "502-tl-reg"
+name = "gs-tl-reg"
 type = "tcp"
 localIP = "192.168.10.234"
 localPort = 25502
@@ -43,7 +43,7 @@ remotePort = 25502
 
 
 [[proxies]]
-name = "502-tl-mysql"
+name = "gs-tl-mysql"
 type = "tcp"
 localIP = "192.168.10.234"
 localPort = 33061

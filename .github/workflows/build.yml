@@ -1,10 +1,12 @@
 name: build docker images
 
+# 监听 push 事件。分支为 master
 on:
   push:
     branches:
       [ master ]
 
+# 工作流
 jobs:
   job1:
     name: build gs server for cenos6.10
@@ -37,14 +39,36 @@ jobs:
             --push \
             ./services/gsserver
 
-      - name: Push Docker image to Docker Hub
+  job2:
+    name: build gs server for centos7.9
+    # 运行所需要的虚拟机环境。它是必填字段
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=today::$(date +'%Y%m%d%H%M')"
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Debug current directory
         run: |
-          docker push -a yulinzhihou/centos6.10:latest \ 
-          docker push -a yulinzhihou/centos6.10:${{ steps.date.outputs.today }}
-
-
-  # job2:
-  #   name: build gs server for centos7.10
+          pwd
+          ls -al
+      - name: Build Docker Image
+        run: |
+          docker buildx build \
+            --file ./services/gsserver7/Dockerfile \
+            --platform linux/amd64,linux/arm64 \
+            --tag yulinzhihou/centos7.9:latest \
+            --tag yulinzhihou/centos7.9:${{ steps.date.outputs.today }} \
+            --push \
+            ./services/gsserver7
 
   # job3:
   #   name: build gs mysql5.1
