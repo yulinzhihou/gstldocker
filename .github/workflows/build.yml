@@ -21,7 +21,7 @@ jobs:
         run: echo "::set-output name=today::$(date +'%Y%m%d%H%M')"
 
       - name: Login to DockerHub
-        uses: docker/login-action@v3
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -38,6 +38,8 @@ jobs:
             --tag yulinzhihou/centos6.10:${{ steps.date.outputs.today }} \
             --push \
             ./services/gsserver
+      - name: push image to dockerhub 
+        run: docker push yulinzhihou/centos6.10:latest
 
   job2:
     name: build gs server for centos7.9
@@ -64,12 +66,13 @@ jobs:
         run: |
           docker buildx build \
             --file ./services/gsserver7/Dockerfile \
-            --platform linux/amd64,linux/arm64 \
+            --platform linux/amd64 \
             --tag yulinzhihou/centos7.9:latest \
             --tag yulinzhihou/centos7.9:${{ steps.date.outputs.today }} \
             --push \
             ./services/gsserver7
-
+      - name: push image to dockerhub 
+        run: docker push yulinzhihou/centos7.9:latest
   # job3:
   #   name: build gs mysql5.1
 

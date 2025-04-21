@@ -6,6 +6,11 @@ RUN mkdir -p /usr/local/src/tlbb
 
 WORKDIR /usr/local/src/tlbb
 
+RUN sed -e "s|^mirrorlist=|#mirrorlist=|g" \
+    -e "s|^#baseurl=http://mirror.centos.org/centos/\$releasever|baseurl=https://mirrors.aliyun.com/centos-vault/$minorver|g" \
+    -i.bak \
+    /etc/yum.repos.d/CentOS-*.repo
+
 RUN yum clean all && \
     yum makecache && \
     yum update -y && \
