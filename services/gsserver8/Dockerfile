@@ -1,4 +1,4 @@
-FROM centos:7.9.2009
+FROM centos:8.4.2105
 
 LABEL author="yulinzhihou" website="https://gsgameshare.com" email="yulinzhihou@gmail.com"
 

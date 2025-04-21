@@ -7,7 +7,7 @@ FROM alpine
 
 LABEL Author="yulinzhihou" Email="yulinzhihou@gmail.com" website="https://gsgameshare.com"
 
-ENV VERSION=0.61.0 TZ=Asia/Shanghai
+ENV VERSION=0.62.0 TZ=Asia/Shanghai
 WORKDIR /
 
 RUN apk add --no-cache tzdata \
