@@ -6,15 +6,14 @@ RUN mkdir -p /usr/local/src/tlbb
 
 WORKDIR /usr/local/src/tlbb
 
-RUN sed -e "s|^mirrorlist=|#mirrorlist=|g" \
-    -e "s|^#baseurl=http://mirror.centos.org/centos/\$releasever|baseurl=https://mirrors.aliyun.com/centos-vault/$minorver|g" \
-    -i.bak \
-    /etc/yum.repos.d/CentOS-*.repo
+COPY lib/mysql-connector-odbc-5.3.13-1.el7.x86_64.rpm /usr/local/src/tlbb/mysql-connector-odbc-5.3.13-1.el7.x86_64.rpm
+
+COPY config/*.repo  /etc/yum.repos.d/
 
 RUN yum clean all && \
     yum makecache && \
     yum update -y && \
-    yum install -y libstdc++.i686 unixODBC.i686 vim curl wget mysql-connector-odbc.x86_64 && \
+    yum install -y libstdc++ unixODBC vim curl wget mysql-connector-odbc-5.3.13-1.el7.x86_64.rpm && \
     yum -y install epel-release && \
     yum -y install jq vim wget && \
     ln -s /usr/lib/libodbc.so /usr/lib/libodbc.so.1 && \
