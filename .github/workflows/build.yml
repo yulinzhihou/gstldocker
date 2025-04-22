@@ -66,7 +66,7 @@ jobs:
         run: |
           docker buildx build \
             --file ./services/gsserver7/Dockerfile \
-            --platform linux/amd64,linux/386,linux/arm/v7 \
+            --platform linux/amd64 \
             --tag yulinzhihou/centos7.9:latest \
             --tag yulinzhihou/centos7.9:${{ steps.date.outputs.today }} \
             --push \
@@ -99,7 +99,7 @@ jobs:
         run: |
           docker buildx build \
             --file ./services/gsserver8/Dockerfile \
-            --platform linux/amd64,linux/386,linux/arm/v7 \
+            --platform linux/amd64 \
             --tag yulinzhihou/centos8.4:latest \
             --tag yulinzhihou/centos8.4:${{ steps.date.outputs.today }} \
             --push \
