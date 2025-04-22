@@ -38,14 +38,23 @@ jobs:
             --tag yulinzhihou/centos6.10:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:latest \
-            --push \
             ./services/gsserver
+
+      - name: show docker tags
+        run: docker images -a
+
       - name: push image to dockerhub
-        run: docker push yulinzhihou/centos6.10:latest
+        run: |
+         docker push yulinzhihou/centos6.10:latest \
+         docker push yulinzhihou/centos6.10:${{ steps.date.outputs.today }}
+
       - name: Login to aliyun Docker registry
         run: docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+
+        
       - name: push image to aliyun Docker registry
-        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:latest
+        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:latest \
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:${{ steps.date.outputs.today }}
 
   job2:
     name: build gs server for centos7.9.2009
@@ -80,11 +89,23 @@ jobs:
             --tag yulinzhihou/centos7.9:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos7.9:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos7.9:latest \
-            --push \
             ./services/gsserver7
-      - name: push image to dockerhub 
-        run: docker push yulinzhihou/centos7.9:latest \ 
-             docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos7.9:latest
+
+      - name: show docker tags
+        run: docker images -a
+    
+      - name: push image to dockerhub
+        run: |
+          docker push yulinzhihou/centos7.9:latest \
+          docker push yulinzhihou/centos7.9:${{ steps.date.outputs.today }}
+
+      - name: Login to aliyun Docker registry
+        run: docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+
+        
+      - name: push image to aliyun Docker registry
+        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos7.9:latest \
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos7.9:${{ steps.date.outputs.today }}
 
   job3:
     name: build gs server for centos8.4.2105
@@ -120,11 +141,23 @@ jobs:
             --tag yulinzhihou/centos8.4:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:latest \
-            --push \
             ./services/gsserver8
-      - name: push image to dockerhub 
-        run: docker push yulinzhihou/centos8.4:latest \
-             docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:latest
+            
+      - name: show docker tags
+        run: docker images -a
+    
+      - name: push image to dockerhub
+        run: |
+          docker push yulinzhihou/centos8.4:latest \
+          docker push yulinzhihou/centos8.4:${{ steps.date.outputs.today }}
+
+      - name: Login to aliyun Docker registry
+        run: docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+
+        
+      - name: push image to aliyun Docker registry
+        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:latest \
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:${{ steps.date.outputs.today }}
   # job3:
   #   name: build gs mysql5.1
 
