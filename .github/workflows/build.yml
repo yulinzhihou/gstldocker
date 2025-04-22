@@ -25,9 +25,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Login to aliyun Docker registry
-        run: |
-          docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
       - name: Debug current directory
         run: |
           pwd
@@ -43,9 +40,12 @@ jobs:
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:latest \
             --push \
             ./services/gsserver
-      - name: push image to dockerhub 
-        run: docker push yulinzhihou/centos6.10:latest \ 
-             docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:latest
+      - name: push image to dockerhub
+        run: docker push yulinzhihou/centos6.10:latest
+      - name: Login to aliyun Docker registry
+        run: docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+      - name: push image to aliyun Docker registry
+        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:latest
 
   job2:
     name: build gs server for centos7.9.2009
