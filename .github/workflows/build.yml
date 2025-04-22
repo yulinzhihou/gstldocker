@@ -45,7 +45,7 @@ jobs:
 
       - name: push image to dockerhub
         run: |
-         docker push yulinzhihou/centos6.10:latest \
+         docker push yulinzhihou/centos6.10:latest && \
          docker push yulinzhihou/centos6.10:${{ steps.date.outputs.today }}
 
       - name: Login to aliyun Docker registry
@@ -53,7 +53,7 @@ jobs:
 
         
       - name: push image to aliyun Docker registry
-        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:latest \
+        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:latest && \
           docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos6.10:${{ steps.date.outputs.today }}
 
   job2:
@@ -96,7 +96,7 @@ jobs:
     
       - name: push image to dockerhub
         run: |
-          docker push yulinzhihou/centos7.9:latest \
+          docker push yulinzhihou/centos7.9:latest  && \
           docker push yulinzhihou/centos7.9:${{ steps.date.outputs.today }}
 
       - name: Login to aliyun Docker registry
@@ -104,7 +104,7 @@ jobs:
 
         
       - name: push image to aliyun Docker registry
-        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos7.9:latest \
+        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos7.9:latest  && \
           docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos7.9:${{ steps.date.outputs.today }}
 
   job3:
@@ -148,7 +148,7 @@ jobs:
     
       - name: push image to dockerhub
         run: |
-          docker push yulinzhihou/centos8.4:latest \
+          docker push yulinzhihou/centos8.4:latest  && \
           docker push yulinzhihou/centos8.4:${{ steps.date.outputs.today }}
 
       - name: Login to aliyun Docker registry
@@ -156,7 +156,7 @@ jobs:
 
         
       - name: push image to aliyun Docker registry
-        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:latest \
+        run: docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:latest  && \
           docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:${{ steps.date.outputs.today }}
   # job3:
   #   name: build gs mysql5.1
