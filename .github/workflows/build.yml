@@ -27,7 +27,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Login to aliyun Docker registry
         run: |
-              docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+          docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
       - name: Debug current directory
         run: |
           pwd
@@ -66,7 +66,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Login to aliyun Docker registry
         run: | 
-              docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+          docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
       - name: Debug current directory
         run: |
           pwd
@@ -105,7 +105,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Login to aliyun Docker registry
         run: |
-              docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+          docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+
       - name: Debug current directory
         run: |
           pwd
@@ -122,7 +123,7 @@ jobs:
             --push \
             ./services/gsserver8
       - name: push image to dockerhub 
-        run: docker push yulinzhihou/centos8.4:latest \ 
+        run: docker push yulinzhihou/centos8.4:latest \
              docker push ${{ secret.ALIYUN_REGISTRY }}/yulinzhihou/centos8.4:latest
   # job3:
   #   name: build gs mysql5.1
