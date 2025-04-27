@@ -21,6 +21,6 @@ RUN yum clean all && \
     ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone && \
     ln -s /usr/lib/libmyodbc5w.so /usr/lib/libmyodbc5.so && \
     yum clean all && \
-    rm -rf /usr/local/src/tlbb
+    rm -rf /usr/local/src/mysql-connector-odbc-5.3.13-1.el7.i686.rpm
 
 CMD tail -f /dev/null
