@@ -193,7 +193,7 @@ jobs:
             --tag yulinzhihou/gs_mysql51:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql51:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql51:latest \
-            ./services/gs_mysql51
+            ./services/gsmysql51
 
       - name: show docker tags
         run: docker images -a
@@ -242,7 +242,7 @@ jobs:
             --tag yulinzhihou/gs_mysql57:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql57:${{ steps.date.outputs.today }} \
             --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql57:latest \
-            ./services/gs_mysql
+            ./services/gsmysql
 
       - name: show docker tags
         run: docker images -a
