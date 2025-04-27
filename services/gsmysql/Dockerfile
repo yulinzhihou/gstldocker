@@ -2,8 +2,7 @@ FROM mysql:5.7.44
 
 LABEL author="yulinzhihou" website="https://gsgameshare.com" e-mail="yulinzhihou@gmail.com"
 
-RUN mkdir /docker-entrypoint-initdb.d && \
-	ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 
 COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
 COPY config/* /usr/local/bin/

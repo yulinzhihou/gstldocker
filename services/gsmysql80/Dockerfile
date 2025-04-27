@@ -4,8 +4,7 @@ LABEL author="yulinzhihou" website="https://gsgameshare.com" e-mail="yulinzhihou
 
 ENV PATH $PATH:/usr/local/mysql/bin:/usr/local/mysql/scripts
 
-RUN mkdir /docker-entrypoint-initdb.d && \
-	ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
+RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
 	echo 'Asia/Shanghai' >/etc/timezone
 
 COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
