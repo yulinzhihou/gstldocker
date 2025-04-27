@@ -1,20 +1,19 @@
-FROM debian:buster-slim
+#
+# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
+#
+# PLEASE DO NOT EDIT IT DIRECTLY.
+#
 
-LABEL author="yulinzhihou" website="https://gsgameshare.com" e-mail="yulinzhihou@gmail.com"
+FROM debian:bookworm-slim
+
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-RUN mkdir /docker-entrypoint-initdb.d
-COPY initdb.d/* /docker-entrypoint-initdb.d/
-COPY config/*.sh /usr/local/bin/
-COPY config/*.sql /usr/local/bin/
+RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-RUN groupadd -r mysql && useradd -r -g mysql mysql; \
-	apt-get update && apt-get install -y --no-install-recommends gnupg dirmngr && rm -rf /var/lib/apt/lists/*; \
-	ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh 
-
+RUN apt-get update && apt-get install -y --no-install-recommends gnupg && rm -rf /var/lib/apt/lists/*
 
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
-ENV GOSU_VERSION 1.12
+ENV GOSU_VERSION 1.17
 RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
@@ -35,10 +34,12 @@ RUN set -eux; \
 	gosu --version; \
 	gosu nobody true
 
-RUN	apt-get update && apt-get install -y --no-install-recommends \
-	# for MYSQL_RANDOM_ROOT_PASSWORD
-	pwgen \
-	# for mysql_ssl_rsa_setup
+RUN mkdir /docker-entrypoint-initdb.d
+
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+	bzip2 \
 	openssl \
 	# FATAL ERROR: please install the following Perl modules before executing /usr/local/mysql/scripts/mysql_install_db:
 	# File::Basename
@@ -46,31 +47,28 @@ RUN	apt-get update && apt-get install -y --no-install-recommends \
 	# Sys::Hostname
 	# Data::Dumper
 	perl \
-	# install "xz-utils" for .sql.xz docker-entrypoint-initdb.d files
 	xz-utils \
-	&& rm -rf /var/lib/apt/lists/*
+	zstd \
+	; \
+	rm -rf /var/lib/apt/lists/*
 
-RUN set -ex; \
-	# gpg: key 5072E1F5: public key "MySQL Release Engineering <mysql-build@oss.oracle.com>" imported
-	key='A4A9406876FCBD3C456770C88C718D3B5072E1F5'; \
+RUN set -eux; \
+	# pub   rsa4096 2023-10-23 [SC] [expires: 2025-10-22]
+	#       BCA4 3417 C3B4 85DD 128E  C6D4 B7B3 B788 A8D3 785C
+	# uid           [ unknown] MySQL Release Engineering <mysql-build@oss.oracle.com>
+	# sub   rsa4096 2023-10-23 [E] [expires: 2025-10-22]
+	key='BCA4 3417 C3B4 85DD 128E C6D4 B7B3 B788 A8D3 785C'; \
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key"; \
-	gpg --batch --export "$key" > /etc/apt/trusted.gpg.d/mysql.gpg; \
+	mkdir -p /etc/apt/keyrings; \
+	gpg --batch --export "$key" > /etc/apt/keyrings/mysql.gpg; \
 	gpgconf --kill all; \
-	rm -rf "$GNUPGHOME"; \
-	apt-key list > /dev/null
+	rm -rf "$GNUPGHOME"
 
-ENV MYSQL_MAJOR 5.7
-ENV MYSQL_VERSION 5.7.36-1debian10 
-ENV MYSQL_DATABASE_WEB web 
-ENV MYSQL_DATABASE_TLBBDB tlbbdb 
-ENV MYSQL_DATABASE_GSGM gsgm
+ENV MYSQL_MAJOR 8.0
+ENV MYSQL_VERSION 8.0.42-1debian12
 
-# 下载并导入 MySQL 的 GPG 公钥（方法一：直接下载）
-# RUN curl -fsSL https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 | gpg --dearmor -o /usr/share/keyrings/mysql.gpg
-
-RUN echo "deb [signed-by=/usr/share/keyrings/mysql.gpg] http://repo.mysql.com/apt/debian buster mysql-5.7" > /etc/apt/sources.list.d/mysql.list
-
+RUN echo 'deb [ signed-by=/etc/apt/keyrings/mysql.gpg ] http://repo.mysql.com/apt/debian/ bookworm mysql-8.0' > /etc/apt/sources.list.d/mysql.list
 
 # the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
 # also, we set debconf keys to make APT a little quieter
@@ -82,13 +80,8 @@ RUN { \
 	} | debconf-set-selections \
 	&& apt-get update \
 	&& apt-get install -y \
-	mysql-server="${MYSQL_VERSION}" \
-	# comment out a few problematic configuration values
-	&& find /etc/mysql/ -name '*.cnf' -print0 \
-	| xargs -0 grep -lZE '^(bind-address|log)' \
-	| xargs -rt -0 sed -Ei 's/^(bind-address|log)/#&/' \
-	# don't reverse lookup hostnames, they are usually another container
-	&& echo '[mysqld]\nskip-host-cache\nskip-name-resolve' > /etc/mysql/conf.d/docker.cnf \
+	mysql-community-client="${MYSQL_VERSION}" \
+	mysql-community-server-core="${MYSQL_VERSION}" \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
 	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
@@ -97,9 +90,11 @@ RUN { \
 
 VOLUME /var/lib/mysql
 
+# Config files
+COPY config/ /etc/mysql/
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-EXPOSE 3306
-
+EXPOSE 3306 33060
 CMD ["mysqld"]
-# docker run --name mysql -e MYSQL_ROOT_PASSWORD="123456" 91b8c41806ee
