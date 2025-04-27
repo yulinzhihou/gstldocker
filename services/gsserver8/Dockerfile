@@ -13,7 +13,7 @@ COPY config/*.repo  /etc/yum.repos.d/
 RUN yum clean all && \
     yum makecache && \
     yum update -y && \
-    yum install -y libstdc++.i686 unixODBC.i686 glibc-common.i686 vim curl wget && \
+    yum install -y libstdc++.i686 unixODBC.i686 vim curl wget && \
     rpm -Uvh mysql-connector-odbc-5.3.13-1.el7.i686.rpm && \
     yum -y install epel-release && \
     yum -y install jq vim wget && \
