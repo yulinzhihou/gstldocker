@@ -11,6 +11,7 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql; \
 	apt-get update && apt-get install -y --no-install-recommends gnupg dirmngr && rm -rf /var/lib/apt/lists/*; \
 	ln -s /usr/local/bin/docker-entrypoint.sh /entrypoint.sh 
 
+
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
 ENV GOSU_VERSION 1.12
@@ -65,7 +66,11 @@ ENV MYSQL_DATABASE_WEB web
 ENV MYSQL_DATABASE_TLBBDB tlbbdb 
 ENV MYSQL_DATABASE_GSGM gsgm
 
-RUN echo 'deb http://repo.mysql.com/apt/debian/ buster mysql-5.7' > /etc/apt/sources.list.d/mysql.list
+# 下载并导入 MySQL 的 GPG 公钥（方法一：直接下载）
+RUN curl -fsSL https://repo.mysql.com/RPM-GPG-KEY-mysql-2022 | gpg --dearmor -o /usr/share/keyrings/mysql.gpg
+
+RUN echo "deb [signed-by=/usr/share/keyrings/mysql.gpg] http://repo.mysql.com/apt/debian buster mysql-5.7" > /etc/apt/sources.list.d/mysql.list
+
 
 # the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
 # also, we set debconf keys to make APT a little quieter
