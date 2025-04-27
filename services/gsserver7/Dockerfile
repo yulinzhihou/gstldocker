@@ -6,7 +6,7 @@ RUN mkdir -p /home/tlbb
 
 WORKDIR /home/tlbb
 
-COPY lib/mysql-connector-odbc-5.3.13-1.el7.i686.rpm /usr/local/src/mysql-connector-odbc-5.3.13-1.el7.i686.rpm
+COPY lib/mysql-connector-odbc-5.3.13-1.el7.i686.rpm /home/tlbb/mysql-connector-odbc-5.3.13-1.el7.i686.rpm
 
 COPY config/*.repo  /etc/yum.repos.d/
 
@@ -21,6 +21,6 @@ RUN yum clean all && \
     ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone && \
     ln -s /usr/lib/libmyodbc5w.so /usr/lib/libmyodbc5.so && \
     yum clean all && \
-    rm -rf /usr/local/src/mysql-connector-odbc-5.3.13-1.el7.i686.rpm
+    rm -rf /home/tlbb/mysql-connector-odbc-5.3.13-1.el7.i686.rpm
 
 CMD tail -f /dev/null
