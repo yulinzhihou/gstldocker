@@ -162,14 +162,108 @@ jobs:
         run: |
           docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_server8:latest && \
           docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_server8:${{ steps.date.outputs.today }}
-  # job3:
-  #   name: build gs mysql5.1
+  
+  
+  job4:
+    name: build gs mysql5.1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  # job4:
-  #   name: build gs mysql5.7
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=today::$(date +'%m%d')"
 
-  # job5:
-  #   name: build gs mysql8.0
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Debug current directory
+        run: |
+          pwd
+          ls -al
+      - name: Build Docker Image
+        run: |
+          docker buildx build \
+            --file ./services/gsmysql51/Dockerfile \
+            --platform linux/amd64 \
+            --tag yulinzhihou/gs_mysql51:latest \
+            --tag yulinzhihou/gs_mysql51:${{ steps.date.outputs.today }} \
+            --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql51:${{ steps.date.outputs.today }} \
+            --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql51:latest \
+            ./services/gsserver
+
+      - name: show docker tags
+        run: docker images -a
+
+      - name: push image to dockerhub
+        run: |
+         docker push yulinzhihou/gs_mysql51:latest && \
+         docker push yulinzhihou/gs_mysql51:${{ steps.date.outputs.today }}
+
+      - name: Login to aliyun Docker registry
+        run: |
+          docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+
+        
+      - name: push image to aliyun Docker registry
+        run: |
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql51:latest && \
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql51:${{ steps.date.outputs.today }}
+
+  job5:
+    name: build gs mysql5.7
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=today::$(date +'%m%d')"
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Debug current directory
+        run: |
+          pwd
+          ls -al
+      - name: Build Docker Image
+        run: |
+          docker buildx build \
+            --file ./services/gsmysql/Dockerfile \
+            --platform linux/amd64 \
+            --tag yulinzhihou/gs_mysql57:latest \
+            --tag yulinzhihou/gs_mysql57:${{ steps.date.outputs.today }} \
+            --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql57:${{ steps.date.outputs.today }} \
+            --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql57:latest \
+            ./services/gsserver
+
+      - name: show docker tags
+        run: docker images -a
+
+      - name: push image to dockerhub
+        run: |
+         docker push yulinzhihou/gs_mysql57:latest && \
+         docker push yulinzhihou/gs_mysql57:${{ steps.date.outputs.today }}
+
+      - name: Login to aliyun Docker registry
+        run: |
+          docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
+
+        
+      - name: push image to aliyun Docker registry
+        run: |
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql57:latest && \
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql57:${{ steps.date.outputs.today }}
+
+  # job6:
+    # name: build gs mysql8.0
 
   # job6:
   #   name: build gs mysql8.1
