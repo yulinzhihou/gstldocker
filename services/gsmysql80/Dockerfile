@@ -95,7 +95,7 @@ COPY config/ /etc/mysql/
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY include/* /usr/loca/bin
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh && \
-	chmod -R 777 /use/local/bin
+	chmod -R 777 /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
