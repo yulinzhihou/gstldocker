@@ -4,20 +4,22 @@ LABEL author="yulinzhihou" website="https://gsgameshare.com" e-mail="yulinzhihou
 
 ENV PATH $PATH:/usr/local/mysql/bin:/usr/local/mysql/scripts
 
-RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
-	echo 'Asia/Shanghai' >/etc/timezone && \
-	chmod -R a+x /usr/local/bin
 
 COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
 COPY config/* /usr/local/bin/
-COPY config/my.cnf /etc/my.cnf
 
 
 WORKDIR /usr/local/mysql
 
 VOLUME /var/lib/mysql
 
+RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
+	echo 'Asia/Shanghai' >/etc/timezone && \
+	chmod -R a+x /usr/local/bin
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+COPY config/my.cnf /etc/my.cnf
 
 EXPOSE 3306
 
