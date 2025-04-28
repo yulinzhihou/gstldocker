@@ -285,7 +285,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker buildx build \
-            --file ./services/gsmysql/Dockerfile \
+            --file ./services/gsmysql80/Dockerfile \
             --platform linux/amd64 \
             --tag yulinzhihou/gs_mysql80:latest \
             --tag yulinzhihou/gs_mysql80:${{ steps.date.outputs.today }} \
