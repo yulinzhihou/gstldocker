@@ -12,6 +12,9 @@ File Encoding         : 65001
 
 Date: 2014-10-19 09:19:46
 */
+-- 创建数据库
+CREATE DATABASE IF NOT EXISTS tlbbdb default charset utf8mb4;
+
 use tlbbdb;
 
 SET FOREIGN_KEY_CHECKS=0;

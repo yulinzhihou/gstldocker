@@ -12,6 +12,9 @@ File Encoding         : 65001
 
 Date: 2012-09-19 16:25:04
 */
+-- 创建数据库
+CREATE DATABASE IF NOT EXISTS web default charset utf8mb4;
+
 use web;
 
 SET FOREIGN_KEY_CHECKS=0;

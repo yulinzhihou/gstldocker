@@ -10,9 +10,7 @@ COPY config/* /usr/local/bin/
 VOLUME /var/lib/mysql
 
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
-	echo 'Asia/Shanghai' >/etc/timezone && \
-	chmod 777 usr/local/bin/docker-entrypoint.sh && \
-	ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh
+	echo 'Asia/Shanghai' >/etc/timezone
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
