@@ -12,9 +12,9 @@ VOLUME /var/lib/mysql
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
 	echo 'Asia/Shanghai' >/etc/timezone && \
 	chmod 777 usr/local/bin/docker-entrypoint.sh && \
-	RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh
+	ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 COPY config/my.cnf /etc/my.cnf.d
 
