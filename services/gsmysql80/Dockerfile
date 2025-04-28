@@ -7,18 +7,16 @@ ENV PATH $PATH:/usr/local/mysql/bin:/usr/local/mysql/scripts
 COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
 COPY config/* /usr/local/bin/
 
-WORKDIR /usr/local/mysql
-
 VOLUME /var/lib/mysql
 
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \ 
 	echo 'Asia/Shanghai' >/etc/timezone && \
-	chmod 777 /usr/local/bin/docker-entrypoint.sh
+	chmod 777 usr/local/bin/docker-entrypoint.sh && \
+	RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-ENTRYPOINT ["/entrypoint.sh"]
-
-COPY config/my.cnf /etc/my.cnf
+COPY config/my.cnf /etc/my.cnf.d
 
 EXPOSE 3306
 
