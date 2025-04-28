@@ -15,7 +15,7 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 	echo 'Asia/Shanghai' >/etc/timezone && \
 	chmod 777 /usr/local/bin/docker-entrypoint.sh
 
-ENTRYPOINT ["/docker-entrypoint-initdb.d/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 COPY config/my.cnf /etc/my.cnf
 
