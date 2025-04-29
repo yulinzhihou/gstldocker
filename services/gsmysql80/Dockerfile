@@ -92,7 +92,7 @@ RUN { \
 VOLUME /var/lib/mysql
 
 # Config files
-COPY config/ /etc/mysql/
+COPY config/ /etc/mysql/conf.d/
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
 COPY include/* /usr/loca/bin
