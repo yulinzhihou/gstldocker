@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gnupg && rm -rf
 # add gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
 ENV GOSU_VERSION 1.17
+
 RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \

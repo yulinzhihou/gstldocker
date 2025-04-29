@@ -308,8 +308,8 @@ docker_setup_db() {
 		# no, we don't care if read finds a terminating character in this heredoc
 		# https://unix.stackexchange.com/questions/265149/why-is-set-o-errexit-breaking-this-read-heredoc-expression/265151#265151
 		read -r -d '' rootCreate <<-EOSQL || true
-			CREATE USER 'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
-			GRANT ALL ON *.* TO 'root'@'${MYSQL_ROOT_HOST}' WITH GRANT OPTION ;
+			CREATE USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+			GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION ;
 		EOSQL
 	fi
 
@@ -341,19 +341,19 @@ docker_setup_db() {
 		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;"
 	fi
 
-	if [ -n "$MYSQL_DATABASE_WEB" ]; then
+	if [ -n "${MYSQL_DATABASE_WEB}" ]; then
 		mysql_note "Creating database ${MYSQL_DATABASE_WEB}"
-		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE_WEB\` ;"
+		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE_WEB\`  default charset utf8mb4  ;"
 	fi
 
-	if [ -n "$MYSQL_DATABASE_TLBBDB" ]; then
+	if [ -n "${MYSQL_DATABASE_TLBBDB}" ]; then
 		mysql_note "Creating database ${MYSQL_DATABASE_TLBBDB}"
-		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE_TLBBDB\` ;"
+		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE_TLBBDB\`  default charset utf8mb4 ;"
 	fi
 
-	if [ -n "$MYSQL_DATABASE_GSGM" ]; then
+	if [ -n "${MYSQL_DATABASE_GSGM}" ]; then
 		mysql_note "Creating database ${MYSQL_DATABASE_GSGM}"
-		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE_GSGM\` ;"
+		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE_GSGM\` default charset utf8mb4 ;"
 	fi
 
 	if [ -n "$MYSQL_USER" ] && [ -n "$MYSQL_PASSWORD" ]; then
