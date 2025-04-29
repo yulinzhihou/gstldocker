@@ -290,9 +290,15 @@ docker_setup_db() {
 	# Load timezone info into database
 	if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
 		# sed is for https://bugs.mysql.com/bug.php?id=20545
-		mysql_tzinfo_to_sql /usr/share/zoneinfo/${TZ} |
+		# 加载 Asia/Shanghai 时区数据
+		mysql_tzinfo_to_sql /usr/share/zoneinfo/Asia/Shanghai |
 			sed 's/Local time zone must be set--see zic manual page/FCTY/' |
 			docker_process_sql --dont-use-mysql-root-password --database=mysql
+
+		# MySQL 8.0+ 显式设置全局时区
+		echo "SET GLOBAL time_zone = '+08:00';" |
+			docker_process_sql --dont-use-mysql-root-password --database=mysql
+
 		# tell docker_process_sql to not use MYSQL_ROOT_PASSWORD since it is not set yet
 	fi
 	# Generate random root password
@@ -310,6 +316,10 @@ docker_setup_db() {
 	read -r -d '' rootCreate <<-EOSQL || true
 		CREATE USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
 		GRANT ALL privileges ON *.* TO 'root'@'localhost';
+		CREATE USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+		GRANT ALL privileges ON *.* TO 'root'@'%';
+		CREATE USER ${MYSQL_USER}@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+		GRANT ALL privileges ON *.* TO ${MYSQL_USER}@'%';
 	EOSQL
 	# fi
 
@@ -332,8 +342,8 @@ docker_setup_db() {
 		GRANT ALL privileges ON *.* TO 'root'@'localhost' ;
 		FLUSH PRIVILEGES ;
 		${rootCreate}
-		CREATE USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
-		GRANT ALL privileges ON *.* TO 'root'@'%';
+		create database if not exists ${MYSQL_} default charset utf8mb4;
+		create database if not exists web default charset utf8mb4;
 		DROP DATABASE IF EXISTS test ;
 	EOSQL
 
