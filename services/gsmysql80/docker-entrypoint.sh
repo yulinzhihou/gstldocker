@@ -329,9 +329,11 @@ docker_setup_db() {
 		SET @@SESSION.SQL_LOG_BIN=0;
 
 		${passwordSet}
-		GRANT ALL privileges ON *.* TO 'root'@'%' ;
+		GRANT ALL privileges ON *.* TO 'root'@'localhost' ;
 		FLUSH PRIVILEGES ;
 		${rootCreate}
+		CREATE USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+		GRANT ALL privileges ON *.* TO 'root'@'%';
 		DROP DATABASE IF EXISTS test ;
 	EOSQL
 
