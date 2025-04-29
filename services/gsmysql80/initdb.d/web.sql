@@ -1,17 +1,5 @@
-/*
-Navicat MySQL Data Transfer
+create database if not exists web default charset utf8mb4;
 
-Source Server         : 88
-Source Server Version : 50045
-Source Host           : 192.168.1.3:3306
-Source Database       : web
-
-Target Server Type    : MYSQL
-Target Server Version : 50045
-File Encoding         : 65001
-
-Date: 2012-09-19 16:25:04
-*/
 use web;
 
 SET FOREIGN_KEY_CHECKS=0;

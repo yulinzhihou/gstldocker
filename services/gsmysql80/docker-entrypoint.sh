@@ -310,15 +310,12 @@ docker_setup_db() {
 	read -r -d '' rootCreate <<-EOSQL || true
 		CREATE USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
 		GRANT ALL privileges ON *.* TO 'root'@'%';
-		CREATE USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
-		GRANT ALL privileges ON *.* TO 'root'@'localhost';
 	EOSQL
 	# fi
 
 	local passwordSet=
 	# no, we don't care if read finds a terminating character in this heredoc (see above)
 	read -r -d '' passwordSet <<-EOSQL || true
-		ALTER USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
 		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
 	EOSQL
 
@@ -387,7 +384,7 @@ _mysql_passfile() {
 mysql_expire_root_user() {
 	if [ -n "$MYSQL_ONETIME_PASSWORD" ]; then
 		docker_process_sql --database=mysql <<-EOSQL
-			ALTER USER 'root'@'%' PASSWORD EXPIRE;
+			ALTER USER 'root'@'localhost' PASSWORD EXPIRE;
 		EOSQL
 	fi
 }
