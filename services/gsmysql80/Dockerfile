@@ -103,4 +103,4 @@ RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh && \
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
-CMD ["mysqld"]
+CMD ["mysqld", "--datadir=/var/lib/mysql", "--user=mysql"]
