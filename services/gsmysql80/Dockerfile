@@ -91,11 +91,13 @@ RUN { \
 
 VOLUME /var/lib/mysql
 
+WORKDIR /usr/local/mysql
+
 # Config files
 COPY config/ /etc/mysql/conf.d/
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
-COPY include/* /usr/loca/bin
+COPY include/* /usr/local/bin
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh && \
 	chmod -R 777 /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
