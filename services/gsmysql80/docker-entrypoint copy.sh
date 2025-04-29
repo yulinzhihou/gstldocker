@@ -2,7 +2,7 @@
 set -eo pipefail
 shopt -s nullglob
 
-# logging functions
+# logging functions 
 mysql_log() {
 	local type="$1"
 	shift
@@ -254,9 +254,6 @@ docker_setup_env() {
 	# Initialize values that might be stored in a file
 	file_env 'MYSQL_ROOT_HOST' '%'
 	file_env 'MYSQL_DATABASE'
-	file_env 'MYSQL_DATABASE_WEB'
-	file_env 'MYSQL_DATABASE_TLBBDB'
-	file_env 'MYSQL_DATABASE_GSGM'
 	file_env 'MYSQL_USER'
 	file_env 'MYSQL_PASSWORD'
 	file_env 'MYSQL_ROOT_PASSWORD'
@@ -316,7 +313,7 @@ docker_setup_db() {
 	local passwordSet=
 	# no, we don't care if read finds a terminating character in this heredoc (see above)
 	read -r -d '' passwordSet <<-EOSQL || true
-		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
 	EOSQL
 
 	# tell docker_process_sql to not use MYSQL_ROOT_PASSWORD since it is just now being set
@@ -358,11 +355,11 @@ docker_setup_db() {
 
 	if [ -n "$MYSQL_USER" ] && [ -n "$MYSQL_PASSWORD" ]; then
 		mysql_note "Creating user ${MYSQL_USER}"
-		docker_process_sql --database=mysql <<<"CREATE USER '$MYSQL_USER'@'%' IDENTIFIED with mysql_native_password BY '$MYSQL_TLBB_PASSWORD' ;"
+		docker_process_sql --database=mysql <<<"CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' ;"
 
 		if [ -n "$MYSQL_DATABASE" ]; then
 			mysql_note "Giving user ${MYSQL_USER} access to schema ${MYSQL_DATABASE}"
-			docker_process_sql --database=mysql <<<"GRANT ALL privileges ON \`${MYSQL_DATABASE//_/\\_}\`.* TO '$MYSQL_USER'@'%' ;"
+			docker_process_sql --database=mysql <<<"GRANT ALL ON \`${MYSQL_DATABASE//_/\\_}\`.* TO '$MYSQL_USER'@'%' ;"
 		fi
 	fi
 }
