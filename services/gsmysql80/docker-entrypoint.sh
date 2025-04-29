@@ -304,19 +304,22 @@ docker_setup_db() {
 	# Sets root password and creates root users for non-localhost hosts
 	local rootCreate=
 	# default root to listen for connections from anywhere
-	if [ -n "$MYSQL_ROOT_HOST" ] && [ "$MYSQL_ROOT_HOST" != 'localhost' ]; then
-		# no, we don't care if read finds a terminating character in this heredoc
-		# https://unix.stackexchange.com/questions/265149/why-is-set-o-errexit-breaking-this-read-heredoc-expression/265151#265151
-		read -r -d '' rootCreate <<-EOSQL || true
-			CREATE USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
-			GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION ;
-		EOSQL
-	fi
+	# if [ -n "$MYSQL_ROOT_HOST" ] && [ "$MYSQL_ROOT_HOST" != 'localhost' ]; then
+	# no, we don't care if read finds a terminating character in this heredoc
+	# https://unix.stackexchange.com/questions/265149/why-is-set-o-errexit-breaking-this-read-heredoc-expression/265151#265151
+	read -r -d '' rootCreate <<-EOSQL || true
+		CREATE USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+		GRANT ALL privileges ON *.* TO 'root'@'%';
+		CREATE USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+		GRANT ALL privileges ON *.* TO 'root'@'localhost';
+	EOSQL
+	# fi
 
 	local passwordSet=
 	# no, we don't care if read finds a terminating character in this heredoc (see above)
 	read -r -d '' passwordSet <<-EOSQL || true
-		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
+		ALTER USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
 	EOSQL
 
 	# tell docker_process_sql to not use MYSQL_ROOT_PASSWORD since it is just now being set
@@ -329,7 +332,7 @@ docker_setup_db() {
 		SET @@SESSION.SQL_LOG_BIN=0;
 
 		${passwordSet}
-		GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION ;
+		GRANT ALL privileges ON *.* TO 'root'@'%' ;
 		FLUSH PRIVILEGES ;
 		${rootCreate}
 		DROP DATABASE IF EXISTS test ;
@@ -362,7 +365,7 @@ docker_setup_db() {
 
 		if [ -n "$MYSQL_DATABASE" ]; then
 			mysql_note "Giving user ${MYSQL_USER} access to schema ${MYSQL_DATABASE}"
-			docker_process_sql --database=mysql <<<"GRANT ALL ON \`${MYSQL_DATABASE//_/\\_}\`.* TO '$MYSQL_USER'@'%' ;"
+			docker_process_sql --database=mysql <<<"GRANT ALL privileges ON \`${MYSQL_DATABASE//_/\\_}\`.* TO '$MYSQL_USER'@'%' ;"
 		fi
 	fi
 }
