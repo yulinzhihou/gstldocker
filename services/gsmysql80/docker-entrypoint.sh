@@ -290,7 +290,7 @@ docker_setup_db() {
 	# Load timezone info into database
 	if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
 		# sed is for https://bugs.mysql.com/bug.php?id=20545
-		mysql_tzinfo_to_sql /usr/share/zoneinfo |
+		mysql_tzinfo_to_sql /usr/share/zoneinfo/${TZ} |
 			sed 's/Local time zone must be set--see zic manual page/FCTY/' |
 			docker_process_sql --dont-use-mysql-root-password --database=mysql
 		# tell docker_process_sql to not use MYSQL_ROOT_PASSWORD since it is not set yet
@@ -308,8 +308,8 @@ docker_setup_db() {
 	# no, we don't care if read finds a terminating character in this heredoc
 	# https://unix.stackexchange.com/questions/265149/why-is-set-o-errexit-breaking-this-read-heredoc-expression/265151#265151
 	read -r -d '' rootCreate <<-EOSQL || true
-		CREATE USER 'root'@'%' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
-		GRANT ALL privileges ON *.* TO 'root'@'%';
+		CREATE USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
+		GRANT ALL privileges ON *.* TO 'root'@'localhost';
 	EOSQL
 	# fi
 
