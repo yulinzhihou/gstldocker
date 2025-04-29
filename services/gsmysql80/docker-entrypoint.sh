@@ -288,25 +288,25 @@ docker_process_sql() {
 # Initializes database with timezone info and root password, plus optional extra db/user
 docker_setup_db() {
 	# Load timezone info into database
-	if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
-		# sed is for https://bugs.mysql.com/bug.php?id=20545
-		# 加载 Asia/Shanghai 时区数据
-		mysql_tzinfo_to_sql /usr/share/zoneinfo/Asia/Shanghai |
-			sed 's/Local time zone must be set--see zic manual page/FCTY/' |
-			docker_process_sql --dont-use-mysql-root-password --database=mysql
+	# if [ -z "$MYSQL_INITDB_SKIP_TZINFO" ]; then
+	# 	# sed is for https://bugs.mysql.com/bug.php?id=20545
+	# 	# 加载 Asia/Shanghai 时区数据
+	# 	mysql_tzinfo_to_sql /usr/share/zoneinfo/Asia/Shanghai |
+	# 		sed 's/Local time zone must be set--see zic manual page/FCTY/' |
+	# 		docker_process_sql --dont-use-mysql-root-password --database=mysql
 
-		# MySQL 8.0+ 显式设置全局时区
-		echo "SET GLOBAL time_zone = '+08:00';" |
-			docker_process_sql --dont-use-mysql-root-password --database=mysql
+	# 	# MySQL 8.0+ 显式设置全局时区
+	# 	echo "SET GLOBAL time_zone = '+08:00';" |
+	# 		docker_process_sql --dont-use-mysql-root-password --database=mysql
 
-		# tell docker_process_sql to not use MYSQL_ROOT_PASSWORD since it is not set yet
-	fi
+	# 	# tell docker_process_sql to not use MYSQL_ROOT_PASSWORD since it is not set yet
+	# fi
 	# Generate random root password
-	if [ -n "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
-		MYSQL_ROOT_PASSWORD="$(openssl rand -base64 24)"
-		export MYSQL_ROOT_PASSWORD
-		mysql_note "GENERATED ROOT PASSWORD: $MYSQL_ROOT_PASSWORD"
-	fi
+	# if [ -n "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
+	# 	MYSQL_ROOT_PASSWORD="$(openssl rand -base64 24)"
+	# 	export MYSQL_ROOT_PASSWORD
+	# 	mysql_note "GENERATED ROOT PASSWORD: $MYSQL_ROOT_PASSWORD"
+	# fi
 	# Sets root password and creates root users for non-localhost hosts
 	local rootCreate=
 	# default root to listen for connections from anywhere
