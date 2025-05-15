@@ -4,7 +4,7 @@ LABEL author="yulinzhihou" website="https://gsgameshare.com"
 
 RUN mkdir -p /usr/local/src/tlbb
 
-WORKDIR /usr/local/src/tlbb
+WORKDIR /home/tlbb
 
 COPY lib/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm /usr/local/src/tlbb/mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm
 
