@@ -21,8 +21,8 @@ if [ ! -d '/var/lib/mysql/mysql' -a "${1%_safe}" = 'mysqld' ]; then
 		DROP DATABASE IF EXISTS test ;
 EOSQL
 
-	if [ "${MYSQL_DATABASE}" ]; then
-		echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE} ;" >>"$TEMP_FILE"
+	if [ "${MYSQL_DATABASE_TLBBDB}" ]; then
+		echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE_TLBBDB} ;" >>"$TEMP_FILE"
 	fi
 
 	if [ "${MYSQL_DATABASE_WEB}" ]; then
