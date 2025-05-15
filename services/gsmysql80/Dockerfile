@@ -100,7 +100,7 @@ COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
 COPY include/* /usr/local/bin
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh && \
 	chmod -R 777 /usr/local/bin
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 EXPOSE 3306
 CMD ["mysqld", "--datadir=/var/lib/mysql", "--user=mysql"]
