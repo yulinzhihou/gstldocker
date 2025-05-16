@@ -8,8 +8,6 @@ WORKDIR /home/tlbb
 
 COPY lib/mysql-connector-odbc-8.3.0-1.el8.x86_64.rpm /home/tlbb/mysql-connector-odbc-8.3.0-1.el8.x86_64.rpm
 
-COPY config/*.repo  /etc/yum.repos.d/
-
 RUN \
     dnf clean all && \
     dnf makecache && \
