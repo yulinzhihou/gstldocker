@@ -2,7 +2,7 @@ FROM quay.io/containerdisks/centos-stream:9-latest
 
 LABEL author="yulinzhihou" website="https://gsgameshare.com" email="yulinzhihou@gmail.com"
 
-RUN mkdir -p /home/tlbb
+RUN ["/bin/bash/","-c","mkdir -p /home/tlbb" ]
 
 WORKDIR /home/tlbb
 
