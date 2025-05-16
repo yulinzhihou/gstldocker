@@ -20,4 +20,4 @@ RUN [ "/bin/bash","-c" "dnf -y upgrade --allowerasing && \
 
 WORKDIR /home/tlbb
 
-CMD ["tail", "-f", "/dev/null"]
+CMD [ "tail", "-f", "/dev/null" ]
