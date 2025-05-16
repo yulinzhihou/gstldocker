@@ -11,7 +11,7 @@ COPY lib/mysql-connector-odbc-8.3.0-1.el8.x86_64.rpm /home/tlbb/mysql-connector-
 RUN \
     dnf clean all && \
     dnf makecache && \
-    dnf update -y && \
+    dnf update -y --allowerasing --skip-broken  --nobest && \
     dnf install -y libstdc++ unixODBC vim curl wget && \
     rpm -Uvh mysql-connector-odbc-8.3.0-1.el8.x86_64.rpm && \
     dnf -y install epel-release && \
