@@ -310,53 +310,57 @@ jobs:
         run: |
           docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql80:latest && \
           docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_mysql80:${{ steps.date.outputs.today }}
-  # job6:
-  #   name: build gs mysql8.1
+  
+  job7:
+    name: build gs server for gs_server9
+    # 运行所需要的虚拟机环境。它是必填字段
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  # job7:
-  #   name: build gs mysql8.4
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=today::$(date +'%m%d')"
 
-  # job8:
-  #   name: build gs php 5.6
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to aliyun Docker registry
+        run: |
+          docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
 
-  # job9:
-  #   name: build gs php 7.0
-  # job10:
-  #   name: build gs php 7.1
-  # job11:
-  #   name: build gs php 7.2
-  # job12:
-  #   name: build gs php 7.3
-  # job13:
-  #   name: build gs php 7.4
-  # job14:
-  #   name: build gs php 8.0
-  # job15:
-  #   name: build gs php 8.1
-  # job16:
-  #   name: build gs php 8.2
-  # job17:
-  #   name: build gs php 8.3
-  # job18:
-  #   name: build gs php 8.4
-  # job19:
-  #   name: build gs billing
+      - name: Debug current directory
+        run: |
+          pwd
+          ls -al
+      - name: Build Docker Image
+        run: |
+          docker buildx build \
+            --file ./services/gsserver9/Dockerfile \
+            --platform linux/amd64 \
+            --tag yulinzhihou/gs_server9:latest \
+            --tag yulinzhihou/gs_server9:${{ steps.date.outputs.today }} \
+            --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_server9:${{ steps.date.outputs.today }} \
+            --tag ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_server9:latest \
+            ./services/gsserver9
+            
+      - name: show docker tags
+        run: docker images -a
+    
+      - name: push image to dockerhub
+        run: |
+          docker push yulinzhihou/gs_server9:latest && \
+          docker push yulinzhihou/gs_server9:${{ steps.date.outputs.today }}
 
-  # job20:
-  #   name: build gs nc clinet for frpc061
+      - name: Login to aliyun Docker registry
+        run: docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
 
-  # job21:
-  #   name: build gs ns server for frps061
-
-  # job22:
-  #   name: build gs nginx for 1.24.0
-
-  # job23:
-  #   name: build gs caddy server
-
-  # job24:
-  #   name: build gs redis
-
-  # job25:
-  #   name: build gs rdkafka
+        
+      - name: push image to aliyun Docker registry latest
+        run: |
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_server9:latest && \
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/yulinzhihou/gs_server9:${{ steps.date.outputs.today }}
   
