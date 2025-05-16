@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:stream9-minimal
+FROM quay.io/centos/centos:stream9
 
 LABEL author="yulinzhihou" website="https://gsgameshare.com" email="yulinzhihou@gmail.com"
 
@@ -10,7 +10,8 @@ COPY lib/mysql-connector-odbc-8.3.0-1.el8.x86_64.rpm /home/tlbb/mysql-connector-
 
 COPY config/*.repo  /etc/yum.repos.d/
 
-RUN dnf clean all && \
+RUN \
+    dnf clean all && \
     dnf makecache && \
     dnf update -y && \
     dnf install -y libstdc++ unixODBC vim curl wget && \
