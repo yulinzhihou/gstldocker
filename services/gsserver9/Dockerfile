@@ -1,4 +1,4 @@
-FROM quay.io/containerdisks/centos-stream:9-latest
+FROM quay.io/centos/centos:stream9-minimal
 
 LABEL author="yulinzhihou" website="https://gsgameshare.com" email="yulinzhihou@gmail.com"
 
