@@ -14,6 +14,8 @@ WORKDIR /usr/local/mysql
 
 VOLUME /var/lib/mysql
 
+RUN chmod -R 777 /usr/local/bin
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 EXPOSE 3306
