@@ -13,7 +13,7 @@ File Encoding         : 65001
 Date: 2014-10-19 09:19:46
 */
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS tlbbdb default charset utf8mb4;
+CREATE DATABASE IF NOT EXISTS tlbbdb default charset utf8;
 
 use tlbbdb;
 
