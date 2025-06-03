@@ -1,6 +1,4 @@
-FROM quay.io/containerdisks/centos-stream:9
-
-LABEL author="yulinzhihou" website="https://gsgameshare.com" email="yulinzhihou@gmail.com"
+FROM rockylinux:9.3
 
 LABEL author="yulinzhihou" website="https://gsgameshare.com" email="yulinzhihou@gmail.com"
 
@@ -9,8 +7,6 @@ RUN mkdir -p /home/tlbb
 WORKDIR /home/tlbb
 
 COPY lib/mysql-connector-odbc-8.4.0-1.el9.x86_64.rpm /home/tlbb/mysql-connector-odbc-8.4.0-1.el9.x86_64.rpm
-
-COPY config/*.repo  /etc/yum.repos.d/
 
 RUN yum clean all && \
     yum makecache && \
