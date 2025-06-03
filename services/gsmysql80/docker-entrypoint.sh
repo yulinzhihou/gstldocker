@@ -336,10 +336,13 @@ docker_setup_db() {
 		DROP DATABASE IF EXISTS test ;
 	EOSQL
 
+	docker_process_sql --database=mysql <<<"ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY \`${MYSQL_ROOT_PASSWORD}\`;"
+
 	# Creates a custom database and user if specified
 	if [ -n "$MYSQL_DATABASE" ]; then
 		mysql_note "Creating database ${MYSQL_DATABASE}"
 		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;"
+		docker_process_sql --database=mysql <<<"ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY \`${MYSQL_ROOT_PASSWORD}\`;"
 	fi
 
 	if [ -n "${MYSQL_DATABASE_WEB}" ]; then
@@ -360,7 +363,6 @@ docker_setup_db() {
 	if [ -n "$MYSQL_USER" ] && [ -n "$MYSQL_PASSWORD" ]; then
 		mysql_note "Creating user ${MYSQL_USER}"
 		docker_process_sql --database=mysql <<<"CREATE USER '$MYSQL_USER'@'%' IDENTIFIED with mysql_native_password BY '$MYSQL_ROOT_PASSWORD' ;"
-		docker_process_sql --database=mysql <<<"CREATE USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '$MYSQL_ROOT_PASSWORD' ;"
 
 		if [ -n "$MYSQL_DATABASE" ]; then
 			mysql_note "Giving user ${MYSQL_USER} access to schema ${MYSQL_DATABASE}"
