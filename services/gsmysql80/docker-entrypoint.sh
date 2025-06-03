@@ -332,6 +332,7 @@ docker_setup_db() {
 		GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
 		FLUSH PRIVILEGES ;
 		${rootCreate}
+		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
 		DROP DATABASE IF EXISTS test ;
 	EOSQL
 
@@ -359,6 +360,7 @@ docker_setup_db() {
 	if [ -n "$MYSQL_USER" ] && [ -n "$MYSQL_PASSWORD" ]; then
 		mysql_note "Creating user ${MYSQL_USER}"
 		docker_process_sql --database=mysql <<<"CREATE USER '$MYSQL_USER'@'%' IDENTIFIED with mysql_native_password BY '$MYSQL_ROOT_PASSWORD' ;"
+		docker_process_sql --database=mysql <<<"CREATE USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '$MYSQL_ROOT_PASSWORD' ;"
 
 		if [ -n "$MYSQL_DATABASE" ]; then
 			mysql_note "Giving user ${MYSQL_USER} access to schema ${MYSQL_DATABASE}"
@@ -412,7 +414,6 @@ _main() {
 	# skip setup if they aren't running mysqld or want an option that stops mysqld
 	if [ "$1" = 'mysqld' ] && ! _mysql_want_help "$@"; then
 		mysql_note "Entrypoint script for MySQL Server ${MYSQL_VERSION} started."
-		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}"
 
 		mysql_check_config "$@"
 		# Load various environment variables
