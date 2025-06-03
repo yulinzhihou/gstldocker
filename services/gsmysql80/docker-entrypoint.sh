@@ -328,7 +328,6 @@ docker_setup_db() {
 		-- What's done in this file shouldn't be replicated
 		--  or products like mysql-fabric won't work
 		SET @@SESSION.SQL_LOG_BIN=0;
-		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
 		${passwordSet}
 		GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
 		FLUSH PRIVILEGES ;
@@ -413,6 +412,7 @@ _main() {
 	# skip setup if they aren't running mysqld or want an option that stops mysqld
 	if [ "$1" = 'mysqld' ] && ! _mysql_want_help "$@"; then
 		mysql_note "Entrypoint script for MySQL Server ${MYSQL_VERSION} started."
+		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}"
 
 		mysql_check_config "$@"
 		# Load various environment variables
