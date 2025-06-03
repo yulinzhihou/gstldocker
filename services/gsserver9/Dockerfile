@@ -11,7 +11,7 @@ COPY lib/mysql-connector-odbc-8.4.0-1.el9.x86_64.rpm /home/tlbb/mysql-connector-
 RUN dnf clean all && \
     dnf makecache && \
     dnf update -y && \
-    dnf install -y libstdc++ unixODBC vim curl wget --allowerasing && \
+    dnf install -y libstdc++ unixODBC vim curl wget procps-ng --allowerasing && \
     rpm -Uvh mysql-connector-odbc-8.4.0-1.el9.x86_64.rpm && \
     dnf -y install epel-release && \
     dnf -y install jq vim wget --allowerasing && \

@@ -310,6 +310,7 @@ docker_setup_db() {
 		read -r -d '' rootCreate <<-EOSQL || true
 			CREATE USER 'root'@'${MYSQL_ROOT_HOST}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
 			GRANT ALL ON *.* TO 'root'@'${MYSQL_ROOT_HOST}' WITH GRANT OPTION ;
+			ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
 		EOSQL
 	fi
 
@@ -327,7 +328,7 @@ docker_setup_db() {
 		-- What's done in this file shouldn't be replicated
 		--  or products like mysql-fabric won't work
 		SET @@SESSION.SQL_LOG_BIN=0;
-
+		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY '${MYSQL_ROOT_PASSWORD}' ;
 		${passwordSet}
 		GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
 		FLUSH PRIVILEGES ;
