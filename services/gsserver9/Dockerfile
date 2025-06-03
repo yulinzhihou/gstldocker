@@ -1,4 +1,4 @@
-FROM rockylinux:9.3-minimal
+FROM eurolinux/centos-stream-9:latest
 
 LABEL author="yulinzhihou" website="https://gsgameshare.com" email="yulinzhihou@gmail.com"
 
