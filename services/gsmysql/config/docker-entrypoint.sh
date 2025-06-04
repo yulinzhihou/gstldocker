@@ -311,6 +311,10 @@ docker_setup_db() {
 		DROP DATABASE IF EXISTS test ;
 	EOSQL
 
+	docker_process_sql --database=mysql <<<"ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+	docker_process_sql --database=mysql <<<"ALTER USER 'root'@'127.0.0.1' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+	docker_process_sql --database=mysql <<<"ALTER USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+
 	# Creates a custom database and user if specified
 	if [ -n "$MYSQL_DATABASE" ]; then
 		mysql_note "Creating database ${MYSQL_DATABASE}"
