@@ -333,12 +333,11 @@ docker_setup_db() {
 		FLUSH PRIVILEGES ;
 		${rootCreate}
 		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
+		ALTER USER 'root'@'%' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
+		ALTER USER 'root'@'127.0.0.1' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
+
 		DROP DATABASE IF EXISTS test ;
 	EOSQL
-
-	docker_process_sql --database=mysql <<<"ALTER USER 'root'@'%' IDENTIFIED with mysql_native_password BY \`${MYSQL_ROOT_PASSWORD}\`;"
-	docker_process_sql --database=mysql <<<"ALTER USER 'root'@'127.0.0.1' IDENTIFIED with mysql_native_password BY \`${MYSQL_ROOT_PASSWORD}\`;"
-	docker_process_sql --database=mysql <<<"ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY \`${MYSQL_ROOT_PASSWORD}\`;"
 
 	# Creates a custom database and user if specified
 	if [ -n "$MYSQL_DATABASE" ]; then

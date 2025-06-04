@@ -18,6 +18,9 @@ if [ ! -d '/var/lib/mysql/mysql' -a "${1%_safe}" = 'mysqld' ]; then
 		DELETE FROM mysql.user ;
 		CREATE USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;
 		grant all privileges on *.* to 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+		ALTER USER 'root'@'127.0.0.1' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+		ALTER USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
 		DROP DATABASE IF EXISTS test ;
 EOSQL
 
@@ -32,10 +35,6 @@ EOSQL
 	if [ "${MYSQL_DATABASE_GSGM}" ]; then
 		echo "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE_GSGM};" >>"$TEMP_FILE"
 	fi
-
-	echo "ALTER USER 'root'@'localhost' IDENTIFIED BY \`${MYSQL_ROOT_PASSWORD}\`;" >>"$TEMP_FILE"
-	echo "ALTER USER 'root'@'127.0.0.1' IDENTIFIED BY \`${MYSQL_ROOT_PASSWORD}\`;" >>"$TEMP_FILE"
-	echo "ALTER USER 'root'@'%' IDENTIFIED BY \`${MYSQL_ROOT_PASSWORD}\`;" >>"$TEMP_FILE"
 
 	echo 'FLUSH PRIVILEGES;' >>"$TEMP_FILE"
 	echo '' >>"$TEMP_FILE"
