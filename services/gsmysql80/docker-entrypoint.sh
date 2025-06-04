@@ -329,8 +329,8 @@ docker_setup_db() {
 		--  or products like mysql-fabric won't work
 		SET @@SESSION.SQL_LOG_BIN=0;
 		${passwordSet}
-		GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
-		FLUSH PRIVILEGES ;
+		-- GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
+		-- FLUSH PRIVILEGES ;
 		${rootCreate}
 		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
 		ALTER USER 'root'@'%' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
