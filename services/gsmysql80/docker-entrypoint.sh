@@ -332,10 +332,6 @@ docker_setup_db() {
 		-- GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION ;
 		-- FLUSH PRIVILEGES ;
 		${rootCreate}
-		ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
-		ALTER USER 'root'@'%' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
-		ALTER USER 'root'@'127.0.0.1' IDENTIFIED with mysql_native_password BY "${MYSQL_ROOT_PASSWORD}";
-
 		DROP DATABASE IF EXISTS test ;
 	EOSQL
 
@@ -343,7 +339,6 @@ docker_setup_db() {
 	if [ -n "$MYSQL_DATABASE" ]; then
 		mysql_note "Creating database ${MYSQL_DATABASE}"
 		docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;"
-		docker_process_sql --database=mysql <<<"ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password BY \`${MYSQL_ROOT_PASSWORD}\`;"
 	fi
 
 	if [ -n "${MYSQL_DATABASE_WEB}" ]; then
