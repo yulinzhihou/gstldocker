@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:bookworm-slim
+FROM debian:12
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
@@ -67,7 +67,7 @@ RUN set -eux; \
 	rm -rf "$GNUPGHOME"
 
 ENV MYSQL_MAJOR 8.0
-ENV MYSQL_VERSION 8.0.42-1debian12
+ENV MYSQL_VERSION=8.0.42
 
 RUN echo 'deb [ signed-by=/etc/apt/keyrings/mysql.gpg ] http://repo.mysql.com/apt/debian/ bookworm mysql-8.0' > /etc/apt/sources.list.d/mysql.list
 
@@ -80,15 +80,14 @@ RUN { \
 	echo mysql-community-server mysql-community-server/remove-test-db select false; \
 	} | debconf-set-selections \
 	&& apt-get update \
-	&& apt-get install -y \
-	mysql-community-client="${MYSQL_VERSION}" \
-	mysql-community-server-core="${MYSQL_VERSION}" \
-	&& rm -rf /var/lib/apt/lists/* \
-	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
-	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
-	# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
-	&& chmod 1777 /var/run/mysqld /var/lib/mysql
-
+    && apt-get install -y \
+    mysql-community-client=${MYSQL_VERSION}* \
+    mysql-community-server-core=${MYSQL_VERSION}* \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
+    && chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
+    && chmod 1777 /var/run/mysqld /var/lib/mysql
+	
 VOLUME /var/lib/mysql
 
 WORKDIR /usr/local/mysql
@@ -100,7 +99,7 @@ COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
 COPY include/* /usr/local/bin
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh && \
 	chmod -R 777 /usr/local/bin
-	
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 EXPOSE 3306
