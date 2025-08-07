@@ -100,6 +100,7 @@ COPY initdb.d/*.sql /docker-entrypoint-initdb.d/
 COPY include/* /usr/local/bin
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh && \
 	chmod -R 777 /usr/local/bin
+	
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 EXPOSE 3306
